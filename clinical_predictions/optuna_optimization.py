@@ -33,8 +33,8 @@ def classifiaction_cv_objective(trial, X_train, y_train, use_feature_selection: 
         model = RandomForestClassifier(max_depth=rf_max_depth, n_estimators=rf_n_estimators,
                                        max_samples=rf_max_samples, class_weight=rf_class_weight)
     elif classifier_name == 'LogisticRegression':
-        logistic_regression_c = trial.suggest_float('logistic_regression_c', 1e-2, 1e2, log=True)
-        logr_penalty = trial.suggest_categorical('logr_penalty', ["l1", "l2"])
+        logistic_regression_c = trial.suggest_float('logistic_regression_c', 5e-1, 5e2, log=True)
+        logr_penalty = trial.suggest_categorical('logr_penalty', ["l2"])
         class_weight = trial.suggest_categorical('class_weight', [None, "balanced"])
         model = sklearn.linear_model.LogisticRegression(C=logistic_regression_c, penalty=logr_penalty,
                                                         solver='liblinear', class_weight=class_weight)
