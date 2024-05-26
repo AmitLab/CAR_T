@@ -1,7 +1,7 @@
 pandas
 numpy
 optuna
-sklearn
+scikit-learn
 optuna
 scipy
-pip install plotly==5.22.0
+plotly
