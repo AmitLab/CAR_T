@@ -3,9 +3,10 @@
 instruction:
 1. clone the repo
 2. create python env
-   use requirments file with pipy (it is recommended to use conda)
+   python version used: python=3.9
+   use requirements file with PyPi
    pip install -r requirements
-3. run the CAR_T_with_ltr.ipynb
+3. run the CAR_T_experiment.ipynb
    1. overview:
       1. this notebook train models with different configuration and produces .pkl with results file
       2. run this 8 times with different configurations, the configurations are just after the imports
@@ -14,4 +15,5 @@ instruction:
       1. edit general configuration
       2. edit experiment configuration, to reproduce paper follow instruction in notebook
 4. run the visualization notebook
-   1. after running this notebook a figure dir with execution date will be created with all figures
+   1. edit the in the general configuration the repo dit
+   2. after running this notebook a figure dir with execution date will be created with all figures

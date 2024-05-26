@@ -5,3 +5,8 @@ scikit-learn
 optuna
 scipy
 plotly
+jupyter
+matplotlib
+openpyxl
+xgboost
+shap
