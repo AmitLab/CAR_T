@@ -1,3 +1,7 @@
-scanpy
 pandas
-omegaconf
+numpy
+optuna
+sklearn
+optuna
+scipy
+pip install plotly==5.22.0
