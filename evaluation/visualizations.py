@@ -93,14 +93,15 @@ def plot_stemplot(y_true, y_proba, ax=None, rotate=False, plot_sample_ind=True, 
 
     buffer = 0.1
     if ax is not None and plot_sample_ind:
+        patient_col = y_true.index.name
         if not rotate:
-            ax.set_xticks(np.arange(len(y_df['patient'])))
-            ax.set_xticklabels(y_df['patient'])
+            ax.set_xticks(np.arange(len(y_df[patient_col])))
+            ax.set_xticklabels(y_df[patient_col])
             plt.xticks(rotation=90)
             plt.ylim([0 - buffer, 1 + buffer])
         else:
-            ax.set_yticks(np.arange(len(y_df['patient'])))
-            ax.set_yticklabels(y_df['patient'])
+            ax.set_yticks(np.arange(len(y_df[patient_col])))
+            ax.set_yticklabels(y_df[patient_col])
             plt.xlim([0 - buffer, 1 + buffer])
 
 
