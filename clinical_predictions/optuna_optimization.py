@@ -6,7 +6,8 @@ import optuna
 import sklearn
 from scipy.stats import hmean
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
-from sklearn.feature_selection import SequentialFeatureSelector
+from sklearn.feature_selection import SelectKBest, f_classif
+from sklearn.pipeline import Pipeline
 from sklearn.model_selection import ShuffleSplit, cross_validate
 from xgboost import XGBClassifier
 
@@ -54,21 +55,20 @@ def classifiaction_cv_objective(trial, X_train, y_train, use_feature_selection: 
             X_train = X_train.loc[subsample_indexs]
             y_train = y_train.loc[subsample_indexs]
 
-    cv = ShuffleSplit(n_splits=8, test_size=0.3, random_state=0)
+    cv = ShuffleSplit(n_splits=6, test_size=0.3, random_state=0)
 
     if use_feature_selection:
-        fix_feature_selection = trial.suggest_categorical('fix_feature_selection', [True, False])
-        alpha_features_to_select = 'auto'
-        if fix_feature_selection:
-            alpha_features_to_select = trial.float("alpha_features_to_select", 0.1, 0.9)
-        sfs = SequentialFeatureSelector(model, scoring='f1_weighted', n_features_to_select=alpha_features_to_select,
-                                        cv=cv, n_jobs=4)
-        X_train = sfs.fit_transform(X_train, y_train)
+        prop_of_selection = trial.suggest_categorical('alpha', [0.1, 0.2, 0.4, 0.6, 1])
+        k = int(X_train.shape[1]*prop_of_selection)
+        model = Pipeline([
+            ('feature_selection', SelectKBest(score_func=f_classif, k=k)),
+            ('classifier', model)
+        ])
 
     scores = cross_validate(model, X_train, y_train, cv=cv,
-                            scoring=['accuracy', 'precision', 'f1', 'f1_weighted', 'f1_macro'])
+                            scoring=['accuracy', 'precision', 'f1', 'f1_weighted', 'f1_macro', 'balanced_accuracy'])
 
-    mean_f1_prec_score = hmean(scores['test_f1_weighted'] + scores['test_precision'] * precision_alpha)
+    mean_f1_prec_score = hmean(scores['test_balanced_accuracy'] + scores['test_precision'] * precision_alpha)
     # mean_f1_prec_score = np.mean(scores['test_f1_weighted'] + scores['test_precision'] * precision_alpha)
     final_score = mean_f1_prec_score
 
